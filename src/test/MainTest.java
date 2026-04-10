@@ -1,25 +1,23 @@
 import org.junit.jupiter.api.Test;
-import java.util.*;
-import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
     @Test
-    void testParityBetweenLoopAndStream() {
-        List<Bogie> testData = Arrays.asList(
-                new Bogie("A", 20), new Bogie("B", 80), new Bogie("C", 40)
-        );
+    void testValidCapacity() {
+        // Should not throw any exception
+        assertDoesNotThrow(() -> {
+            new PassengerBogie("Sleeper", 72);
+        });
+    }
 
-        // Filter: Capacity > 50
-        List<Bogie> loopResult = new ArrayList<>();
-        for(Bogie b : testData) if(b.getCapacity() > 50) loopResult.add(b);
+    @Test
+    void testInvalidCapacityThrowsException() {
+        // Verify that the custom exception is actually thrown
+        InvalidCapacityException exception = assertThrows(InvalidCapacityException.class, () -> {
+            new PassengerBogie("General", 0);
+        });
 
-        List<Bogie> streamResult = testData.stream()
-                .filter(b -> b.getCapacity() > 50)
-                .collect(Collectors.toList());
-
-        assertEquals(loopResult.size(), streamResult.size());
-        assertEquals(loopResult.get(0).getCapacity(), streamResult.get(0).getCapacity());
+        assertTrue(exception.getMessage().contains("Must be greater than 0"));
     }
 }

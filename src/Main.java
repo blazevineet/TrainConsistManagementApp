@@ -1,47 +1,40 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
-class Bogie {
-    private String id;
+// 1. Custom Exception Class
+class InvalidCapacityException extends Exception {
+    public InvalidCapacityException(String message) {
+        super(message);
+    }
+}
+
+class PassengerBogie {
+    private String name;
     private int capacity;
 
-    public Bogie(String id, int capacity) {
-        this.id = id;
+    // 2. Constructor with Validation (Fail-Fast)
+    public PassengerBogie(String name, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Invalid capacity: " + capacity + ". Must be greater than 0.");
+        }
+        this.name = name;
         this.capacity = capacity;
     }
-    public int getCapacity() { return capacity; }
+
+    public String getName() { return name; }
 }
 
 public class Main {
     public static void main(String[] args) {
-        List<Bogie> dataset = new ArrayList<>();
-        for (int i = 0; i < 100000; i++) {
-            dataset.add(new Bogie("B-" + i, (int) (Math.random() * 100)));
+        try {
+            // Valid Bogie
+            PassengerBogie bogie1 = new PassengerBogie("Sleeper", 72);
+            System.out.println("Created: " + bogie1.getName());
+
+            // Invalid Bogie - This will trigger the catch block
+            PassengerBogie bogie2 = new PassengerBogie("First Class", -5);
+
+        } catch (InvalidCapacityException e) {
+            System.err.println("Safety Check Failed: " + e.getMessage());
         }
-
-        // --- Loop Performance ---
-        long startLoop = System.nanoTime();
-        List<Bogie> filteredLoop = new ArrayList<>();
-        for (Bogie b : dataset) {
-            if (b.getCapacity() > 50) {
-                filteredLoop.add(b);
-            }
-        }
-        long endLoop = System.nanoTime();
-        long loopDuration = endLoop - startLoop;
-
-        // --- Stream Performance ---
-        long startStream = System.nanoTime();
-        List<Bogie> filteredStream = dataset.stream()
-                .filter(b -> b.getCapacity() > 50)
-                .collect(Collectors.toList());
-        long endStream = System.nanoTime();
-        long streamDuration = endStream - startStream;
-
-        // Display Results
-        System.out.println("Execution Results:");
-        System.out.println("Loop Duration   : " + loopDuration + " ns");
-        System.out.println("Stream Duration : " + streamDuration + " ns");
-        System.out.println("Difference      : " + Math.abs(streamDuration - loopDuration) + " ns");
     }
 }
