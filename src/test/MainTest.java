@@ -4,22 +4,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class MainTest {
 
     @Test
-    void testAlphabeticalSorting() {
-        String[] input = {"General", "AC Chair", "Sleeper"};
-        String[] expected = {"AC Chair", "General", "Sleeper"};
+    void testSuccessfulSearch() {
+        String[] data = {"TRN-1", "TRN-2", "TRN-3"};
+        assertEquals(1, Main.linearSearch(data, "TRN-2"), "Should find ID at index 1");
+    }
 
-        Main.sortBogieNames(input);
-
-        assertArrayEquals(expected, input, "The names should be sorted alphabetically.");
+    @Test
+    void testFailedSearch() {
+        String[] data = {"TRN-1", "TRN-2"};
+        assertEquals(-1, Main.linearSearch(data, "TRN-99"), "Should return -1 when ID is missing");
     }
 
     @Test
     void testCaseSensitivity() {
-        // Java sorts Uppercase before Lowercase in natural order
-        String[] input = {"sleeper", "AC Chair"};
-        String[] expected = {"AC Chair", "sleeper"};
-
-        Main.sortBogieNames(input);
-        assertArrayEquals(expected, input);
+        String[] data = {"BOGIE"};
+        // Linear search is usually case-sensitive unless specified
+        assertEquals(-1, Main.linearSearch(data, "bogie"));
     }
 }

@@ -1,34 +1,30 @@
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
-        // Initial unsorted capacities
-        int[] capacities = {72, 24, 90, 18, 54};
+        // Unsorted list of Bogie IDs
+        String[] bogieIDs = {"B-102", "B-505", "B-301", "B-999", "B-204"};
+        String searchKey = "B-999";
 
-        System.out.println("Original Capacities: " + Arrays.toString(capacities));
+        // UC18: Perform Linear Search
+        int index = linearSearch(bogieIDs, searchKey);
 
-        // UC16: Manual Bubble Sort
-        bubbleSort(capacities);
-
-        System.out.println("Sorted Capacities:   " + Arrays.toString(capacities));
+        if (index != -1) {
+            System.out.println("Bogie " + searchKey + " found at index: " + index);
+        } else {
+            System.out.println("Bogie " + searchKey + " not found in the train consist.");
+        }
     }
 
     /**
-     * Logic: Repeatedly swap adjacent elements if they are in the wrong order.
-     * Time Complexity: O(n²)
+     * Logic: Sequential Traversal
+     * Complexity: O(n)
      */
-    public static void bubbleSort(int[] arr) {
-        int n = arr.length;
-        for (int i = 0; i < n - 1; i++) {
-            // Last i elements are already in place
-            for (int j = 0; j < n - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    // Swap Logic using a temporary variable
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
+    public static int linearSearch(String[] arr, String key) {
+        for (int i = 0; i < arr.length; i++) {
+            // Using .equals() for safe String comparison
+            if (arr[i].equals(key)) {
+                return i; // Early Termination: Match found
             }
         }
+        return -1; // Match not found
     }
 }
