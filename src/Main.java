@@ -1,25 +1,38 @@
-import java.util.regex.*;
+import java.util.*;
+
+class GoodsBogie {
+    private String type;
+    private String cargo;
+
+    public GoodsBogie(String type, String cargo) {
+        this.type = type;
+        this.cargo = cargo;
+    }
+
+    public String getType() { return type; }
+    public String getCargo() { return cargo; }
+}
 
 public class Main {
-    // Regex Patterns
-    private static final String TRAIN_ID_REGEX = "TRN-\\d{4}";
-    private static final String CARGO_CODE_REGEX = "PET-[A-Z]{2}";
-
     public static void main(String[] args) {
-        String testTrainID = "TRN-1234";
-        String testCargoCode = "PET-XY";
+        List<GoodsBogie> goodsTrain = new ArrayList<>();
+        goodsTrain.add(new GoodsBogie("Box", "Coal"));
+        goodsTrain.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsTrain.add(new GoodsBogie("Flat", "Steel"));
 
-        System.out.println("Train ID Validation: " + validateTrainID(testTrainID));
-        System.out.println("Cargo Code Validation: " + validateCargoCode(testCargoCode));
+        // UC12: Safety Compliance Check using allMatch
+        boolean isSafe = checkSafetyCompliance(goodsTrain);
+
+        System.out.println("Train Safety Status: " + (isSafe ? "COMPLIANT ✅" : "UNSAFE ❌"));
     }
 
-    public static boolean validateTrainID(String input) {
-        Pattern pattern = Pattern.compile(TRAIN_ID_REGEX);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.matches();
-    }
-
-    public static boolean validateCargoCode(String input) {
-        return Pattern.matches(CARGO_CODE_REGEX, input); // Shortcut method
+    public static boolean checkSafetyCompliance(List<GoodsBogie> bogies) {
+        return bogies.stream().allMatch(bogie -> {
+            // Rule: If type is Cylindrical, cargo MUST be Petroleum
+            if (bogie.getType().equalsIgnoreCase("Cylindrical")) {
+                return bogie.getCargo().equalsIgnoreCase("Petroleum");
+            }
+            return true; // Other bogie types are currently considered safe
+        });
     }
 }

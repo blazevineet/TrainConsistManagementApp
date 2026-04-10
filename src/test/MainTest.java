@@ -1,21 +1,24 @@
 import org.junit.jupiter.api.Test;
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
     @Test
-    void testTrainIDValidation() {
-        assertTrue(Main.validateTrainID("TRN-5566"), "Valid Train ID should pass");
-        assertFalse(Main.validateTrainID("TRN-123"), "Too short Train ID should fail");
-        assertFalse(Main.validateTrainID("TRAIN-1234"), "Incorrect prefix should fail");
-        assertFalse(Main.validateTrainID("TRN-ABCD"), "Letters instead of digits should fail");
+    void testSafetyCompliancePass() {
+        List<GoodsBogie> safeTrain = Arrays.asList(
+                new GoodsBogie("Cylindrical", "Petroleum"),
+                new GoodsBogie("Box", "Coal")
+        );
+        assertTrue(Main.checkSafetyCompliance(safeTrain), "Train should be compliant.");
     }
 
     @Test
-    void testCargoCodeValidation() {
-        assertTrue(Main.validateCargoCode("PET-AB"), "Valid Cargo Code should pass");
-        assertFalse(Main.validateCargoCode("PET-abc"), "Lowercase letters should fail");
-        assertFalse(Main.validateCargoCode("PET-12"), "Digits in Cargo Code should fail");
-        assertFalse(Main.validateCargoCode("PET-ABC"), "Too many letters should fail");
+    void testSafetyComplianceFail() {
+        List<GoodsBogie> unsafeTrain = Arrays.asList(
+                new GoodsBogie("Cylindrical", "Chemicals"), // Violation!
+                new GoodsBogie("Box", "Coal")
+        );
+        assertFalse(Main.checkSafetyCompliance(unsafeTrain), "Train should fail safety check due to Cylindrical-Chemical combo.");
     }
 }
