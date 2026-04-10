@@ -4,21 +4,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class MainTest {
 
     @Test
-    void testBubbleSortLogic() {
-        int[] unsorted = {90, 10, 50, 20};
-        int[] expected = {10, 20, 50, 90};
+    void testAlphabeticalSorting() {
+        String[] input = {"General", "AC Chair", "Sleeper"};
+        String[] expected = {"AC Chair", "General", "Sleeper"};
 
-        Main.bubbleSort(unsorted);
+        Main.sortBogieNames(input);
 
-        assertArrayEquals(expected, unsorted, "The array was not sorted correctly by the algorithm.");
+        assertArrayEquals(expected, input, "The names should be sorted alphabetically.");
     }
 
     @Test
-    void testAlreadySortedArray() {
-        int[] sorted = {10, 20, 30};
-        int[] expected = {10, 20, 30};
+    void testCaseSensitivity() {
+        // Java sorts Uppercase before Lowercase in natural order
+        String[] input = {"sleeper", "AC Chair"};
+        String[] expected = {"AC Chair", "sleeper"};
 
-        Main.bubbleSort(sorted);
-        assertArrayEquals(expected, sorted);
+        Main.sortBogieNames(input);
+        assertArrayEquals(expected, input);
     }
 }
