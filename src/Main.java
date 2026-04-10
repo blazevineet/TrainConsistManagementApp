@@ -1,43 +1,32 @@
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Precondition: Data MUST be sorted
-        String[] bogieIDs = {"B-101", "B-205", "B-309", "B-412", "B-500", "B-670"};
-        String searchKey = "B-412";
+        List<String> emptyTrain = new ArrayList<>();
 
-        System.out.println("Searching for: " + searchKey + " in sorted list " + Arrays.toString(bogieIDs));
-
-        // UC19: Perform Binary Search
-        int resultIndex = binarySearch(bogieIDs, searchKey);
-
-        if (resultIndex != -1) {
-            System.out.println("Success: Bogie found at index " + resultIndex);
-        } else {
-            System.out.println("Result: Bogie not found.");
+        try {
+            System.out.println("Initiating search on empty train...");
+            performSafeSearch(emptyTrain, "B-101");
+        } catch (IllegalStateException e) {
+            System.err.println("Operation Aborted: " + e.getMessage());
         }
     }
 
     /**
-     * Logic: Divide and Conquer
-     * Complexity: O(log n)
+     * Logic: State Validation before Execution
+     * Throws: IllegalStateException if list is empty
      */
-    public static int binarySearch(String[] arr, String key) {
-        int low = 0;
-        int high = arr.length - 1;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2; // Better way to find mid to avoid overflow
-            int comparison = key.compareTo(arr[mid]);
-
-            if (comparison == 0) {
-                return mid; // Found it!
-            } else if (comparison > 0) {
-                low = mid + 1; // Key is in the upper half
-            } else {
-                high = mid - 1; // Key is in the lower half
-            }
+    public static void performSafeSearch(List<String> bogies, String key) {
+        // UC20: Fail-Fast Validation
+        if (bogies == null || bogies.isEmpty()) {
+            throw new IllegalStateException("Search Failed: The train consist is empty. Please add bogies before searching.");
         }
-        return -1; // Not found
+
+        // Search logic only proceeds if the state is valid
+        if (bogies.contains(key)) {
+            System.out.println("Bogie " + key + " found!");
+        } else {
+            System.out.println("Bogie " + key + " not found.");
+        }
     }
 }

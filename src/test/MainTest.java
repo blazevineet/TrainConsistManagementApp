@@ -1,19 +1,29 @@
 import org.junit.jupiter.api.Test;
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
     @Test
-    void testBinarySearchFound() {
-        String[] data = {"A", "B", "C", "D", "E"};
-        assertEquals(0, Main.binarySearch(data, "A"), "Should find 'A' at start");
-        assertEquals(4, Main.binarySearch(data, "E"), "Should find 'E' at end");
-        assertEquals(2, Main.binarySearch(data, "C"), "Should find 'C' in middle");
+    void testSearchOnEmptyListThrowsException() {
+        List<String> emptyList = new ArrayList<>();
+
+        // Assert that the specific exception is thrown
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            Main.performSafeSearch(emptyList, "ANY-ID");
+        });
+
+        // Verify the message content
+        assertTrue(exception.getMessage().contains("train consist is empty"));
     }
 
     @Test
-    void testBinarySearchNotFound() {
-        String[] data = {"A", "C", "E"};
-        assertEquals(-1, Main.binarySearch(data, "B"), "Should return -1 for missing element");
+    void testSearchOnPopulatedListSucceeds() {
+        List<String> populatedList = Arrays.asList("B-001");
+
+        // Should not throw any exception
+        assertDoesNotThrow(() -> {
+            Main.performSafeSearch(populatedList, "B-001");
+        });
     }
 }
