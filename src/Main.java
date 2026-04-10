@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 class Bogie {
     private String name;
@@ -10,31 +9,29 @@ class Bogie {
         this.capacity = capacity;
     }
 
-    public String getName() { return name; }
     public int getCapacity() { return capacity; }
-
-    @Override
-    public String toString() {
-        return "Capacity:" + capacity;
-    }
 }
 
 public class Main {
     public static void main(String[] args) {
         List<Bogie> train = new ArrayList<>();
         train.add(new Bogie("Sleeper", 72));
-        train.add(new Bogie("Sleeper", 72));
         train.add(new Bogie("AC Chair", 78));
-        train.add(new Bogie("AC Chair", 78));
+        train.add(new Bogie("First Class", 24));
         train.add(new Bogie("General", 90));
 
-        // UC9: Grouping bogies by Name using Streams
-        Map<String, List<Bogie>> groupedBogies = train.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
+        // UC10: Aggregate seating capacities using map and reduce
+        int totalCapacity = train.stream()
+                .map(Bogie::getCapacity)        // Step 1: Extract capacities
+                .reduce(0, Integer::sum);      // Step 2: Sum them up starting from 0
 
-        // Displaying the result
-        groupedBogies.forEach((type, list) -> {
-            System.out.println(type + " Bogies: " + list);
-        });
+        System.out.println("Total Train Seating Capacity: " + totalCapacity);
+    }
+
+    // Helper method for testing
+    public static int calculateTotalCapacity(List<Bogie> bogies) {
+        return bogies.stream()
+                .map(Bogie::getCapacity)
+                .reduce(0, Integer::sum);
     }
 }

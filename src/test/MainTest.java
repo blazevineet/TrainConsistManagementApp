@@ -1,28 +1,26 @@
 import org.junit.jupiter.api.Test;
 import java.util.*;
-import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
     @Test
-    void testGroupingByName() {
+    void testTotalCapacityReduction() {
         List<Bogie> bogies = Arrays.asList(
                 new Bogie("Sleeper", 72),
-                new Bogie("Sleeper", 72),
-                new Bogie("General", 90)
+                new Bogie("AC Chair", 78),
+                new Bogie("First Class", 24)
         );
 
-        Map<String, List<Bogie>> result = bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
+        // Expected sum: 72 + 78 + 24 = 174
+        int total = Main.calculateTotalCapacity(bogies);
+        assertEquals(174, total, "The total capacity calculation is incorrect.");
+    }
 
-        // Verify that there are 2 groups
-        assertEquals(2, result.size());
-
-        // Verify Sleeper group has 2 entries
-        assertEquals(2, result.get("Sleeper").size());
-
-        // Verify General group has 1 entry
-        assertEquals(1, result.get("General").size());
+    @Test
+    void testEmptyListCapacity() {
+        List<Bogie> emptyTrain = new ArrayList<>();
+        int total = Main.calculateTotalCapacity(emptyTrain);
+        assertEquals(0, total, "Empty train should have 0 capacity.");
     }
 }
