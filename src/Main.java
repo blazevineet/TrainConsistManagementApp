@@ -1,37 +1,25 @@
-import java.util.*;
-
-class Bogie {
-    private String name;
-    private int capacity;
-
-    public Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    public int getCapacity() { return capacity; }
-}
+import java.util.regex.*;
 
 public class Main {
+    // Regex Patterns
+    private static final String TRAIN_ID_REGEX = "TRN-\\d{4}";
+    private static final String CARGO_CODE_REGEX = "PET-[A-Z]{2}";
+
     public static void main(String[] args) {
-        List<Bogie> train = new ArrayList<>();
-        train.add(new Bogie("Sleeper", 72));
-        train.add(new Bogie("AC Chair", 78));
-        train.add(new Bogie("First Class", 24));
-        train.add(new Bogie("General", 90));
+        String testTrainID = "TRN-1234";
+        String testCargoCode = "PET-XY";
 
-        // UC10: Aggregate seating capacities using map and reduce
-        int totalCapacity = train.stream()
-                .map(Bogie::getCapacity)        // Step 1: Extract capacities
-                .reduce(0, Integer::sum);      // Step 2: Sum them up starting from 0
-
-        System.out.println("Total Train Seating Capacity: " + totalCapacity);
+        System.out.println("Train ID Validation: " + validateTrainID(testTrainID));
+        System.out.println("Cargo Code Validation: " + validateCargoCode(testCargoCode));
     }
 
-    // Helper method for testing
-    public static int calculateTotalCapacity(List<Bogie> bogies) {
-        return bogies.stream()
-                .map(Bogie::getCapacity)
-                .reduce(0, Integer::sum);
+    public static boolean validateTrainID(String input) {
+        Pattern pattern = Pattern.compile(TRAIN_ID_REGEX);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
+    }
+
+    public static boolean validateCargoCode(String input) {
+        return Pattern.matches(CARGO_CODE_REGEX, input); // Shortcut method
     }
 }

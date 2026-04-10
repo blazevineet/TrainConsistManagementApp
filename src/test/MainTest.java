@@ -1,26 +1,21 @@
 import org.junit.jupiter.api.Test;
-import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
     @Test
-    void testTotalCapacityReduction() {
-        List<Bogie> bogies = Arrays.asList(
-                new Bogie("Sleeper", 72),
-                new Bogie("AC Chair", 78),
-                new Bogie("First Class", 24)
-        );
-
-        // Expected sum: 72 + 78 + 24 = 174
-        int total = Main.calculateTotalCapacity(bogies);
-        assertEquals(174, total, "The total capacity calculation is incorrect.");
+    void testTrainIDValidation() {
+        assertTrue(Main.validateTrainID("TRN-5566"), "Valid Train ID should pass");
+        assertFalse(Main.validateTrainID("TRN-123"), "Too short Train ID should fail");
+        assertFalse(Main.validateTrainID("TRAIN-1234"), "Incorrect prefix should fail");
+        assertFalse(Main.validateTrainID("TRN-ABCD"), "Letters instead of digits should fail");
     }
 
     @Test
-    void testEmptyListCapacity() {
-        List<Bogie> emptyTrain = new ArrayList<>();
-        int total = Main.calculateTotalCapacity(emptyTrain);
-        assertEquals(0, total, "Empty train should have 0 capacity.");
+    void testCargoCodeValidation() {
+        assertTrue(Main.validateCargoCode("PET-AB"), "Valid Cargo Code should pass");
+        assertFalse(Main.validateCargoCode("PET-abc"), "Lowercase letters should fail");
+        assertFalse(Main.validateCargoCode("PET-12"), "Digits in Cargo Code should fail");
+        assertFalse(Main.validateCargoCode("PET-ABC"), "Too many letters should fail");
     }
 }
