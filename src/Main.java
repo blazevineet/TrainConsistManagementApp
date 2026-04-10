@@ -1,30 +1,43 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
-        // Unsorted list of Bogie IDs
-        String[] bogieIDs = {"B-102", "B-505", "B-301", "B-999", "B-204"};
-        String searchKey = "B-999";
+        // Precondition: Data MUST be sorted
+        String[] bogieIDs = {"B-101", "B-205", "B-309", "B-412", "B-500", "B-670"};
+        String searchKey = "B-412";
 
-        // UC18: Perform Linear Search
-        int index = linearSearch(bogieIDs, searchKey);
+        System.out.println("Searching for: " + searchKey + " in sorted list " + Arrays.toString(bogieIDs));
 
-        if (index != -1) {
-            System.out.println("Bogie " + searchKey + " found at index: " + index);
+        // UC19: Perform Binary Search
+        int resultIndex = binarySearch(bogieIDs, searchKey);
+
+        if (resultIndex != -1) {
+            System.out.println("Success: Bogie found at index " + resultIndex);
         } else {
-            System.out.println("Bogie " + searchKey + " not found in the train consist.");
+            System.out.println("Result: Bogie not found.");
         }
     }
 
     /**
-     * Logic: Sequential Traversal
-     * Complexity: O(n)
+     * Logic: Divide and Conquer
+     * Complexity: O(log n)
      */
-    public static int linearSearch(String[] arr, String key) {
-        for (int i = 0; i < arr.length; i++) {
-            // Using .equals() for safe String comparison
-            if (arr[i].equals(key)) {
-                return i; // Early Termination: Match found
+    public static int binarySearch(String[] arr, String key) {
+        int low = 0;
+        int high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2; // Better way to find mid to avoid overflow
+            int comparison = key.compareTo(arr[mid]);
+
+            if (comparison == 0) {
+                return mid; // Found it!
+            } else if (comparison > 0) {
+                low = mid + 1; // Key is in the upper half
+            } else {
+                high = mid - 1; // Key is in the lower half
             }
         }
-        return -1; // Match not found
+        return -1; // Not found
     }
 }

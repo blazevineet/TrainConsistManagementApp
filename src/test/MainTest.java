@@ -4,21 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class MainTest {
 
     @Test
-    void testSuccessfulSearch() {
-        String[] data = {"TRN-1", "TRN-2", "TRN-3"};
-        assertEquals(1, Main.linearSearch(data, "TRN-2"), "Should find ID at index 1");
+    void testBinarySearchFound() {
+        String[] data = {"A", "B", "C", "D", "E"};
+        assertEquals(0, Main.binarySearch(data, "A"), "Should find 'A' at start");
+        assertEquals(4, Main.binarySearch(data, "E"), "Should find 'E' at end");
+        assertEquals(2, Main.binarySearch(data, "C"), "Should find 'C' in middle");
     }
 
     @Test
-    void testFailedSearch() {
-        String[] data = {"TRN-1", "TRN-2"};
-        assertEquals(-1, Main.linearSearch(data, "TRN-99"), "Should return -1 when ID is missing");
-    }
-
-    @Test
-    void testCaseSensitivity() {
-        String[] data = {"BOGIE"};
-        // Linear search is usually case-sensitive unless specified
-        assertEquals(-1, Main.linearSearch(data, "bogie"));
+    void testBinarySearchNotFound() {
+        String[] data = {"A", "C", "E"};
+        assertEquals(-1, Main.binarySearch(data, "B"), "Should return -1 for missing element");
     }
 }
