@@ -1,24 +1,25 @@
 import org.junit.jupiter.api.Test;
 import java.util.*;
+import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
     @Test
-    void testSafetyCompliancePass() {
-        List<GoodsBogie> safeTrain = Arrays.asList(
-                new GoodsBogie("Cylindrical", "Petroleum"),
-                new GoodsBogie("Box", "Coal")
+    void testParityBetweenLoopAndStream() {
+        List<Bogie> testData = Arrays.asList(
+                new Bogie("A", 20), new Bogie("B", 80), new Bogie("C", 40)
         );
-        assertTrue(Main.checkSafetyCompliance(safeTrain), "Train should be compliant.");
-    }
 
-    @Test
-    void testSafetyComplianceFail() {
-        List<GoodsBogie> unsafeTrain = Arrays.asList(
-                new GoodsBogie("Cylindrical", "Chemicals"), // Violation!
-                new GoodsBogie("Box", "Coal")
-        );
-        assertFalse(Main.checkSafetyCompliance(unsafeTrain), "Train should fail safety check due to Cylindrical-Chemical combo.");
+        // Filter: Capacity > 50
+        List<Bogie> loopResult = new ArrayList<>();
+        for(Bogie b : testData) if(b.getCapacity() > 50) loopResult.add(b);
+
+        List<Bogie> streamResult = testData.stream()
+                .filter(b -> b.getCapacity() > 50)
+                .collect(Collectors.toList());
+
+        assertEquals(loopResult.size(), streamResult.size());
+        assertEquals(loopResult.get(0).getCapacity(), streamResult.get(0).getCapacity());
     }
 }
